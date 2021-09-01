@@ -3,8 +3,7 @@ import './Header.css';
 import Button from '@material-ui/core/Button';
 import logo from '../../assets/logo.svg';
 import Modal from 'react-modal';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import {Tabs, Tab} from '@material-ui/core';
 import Login from './Login';
 import Register from './Register';
 

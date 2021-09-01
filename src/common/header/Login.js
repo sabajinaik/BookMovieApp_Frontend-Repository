@@ -10,8 +10,27 @@ const Login = () => {
 
     const {username,loginPassword}=usernamePassword;
 
+    const invokeAuthenticationControllerAPI = async () => {
+        try{
+            const authorizationString = btoa(`Basic ${username}:${loginPassword}`);
+            const rawResponse = await fetch(`http://localhost:8085/api/v1/auth/login`,{
+                method: 'POST',
+                headers:{
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "authorization": `${authorizationString}`
+                }});
+            if (rawResponse.ok){
+                const result = await rawResponse.json();
+            }else{
+                //error occurred
+            }
+        }catch (e) {
+            console.log(e.message||'Something broke');
+        }
+    }
     const loginClickHandler=(e)=>{
-        console.log(e);
+        invokeAuthenticationControllerAPI();
     };
 
     const inputChangeHandler = (e)=>{

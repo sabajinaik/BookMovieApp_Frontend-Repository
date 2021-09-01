@@ -34,7 +34,7 @@ const Register = () => {
                 }
             });
 
-            const result = JSON.stringify(registrationElements);
+            const result = await rawResponse.json();
 
             if (rawResponse.ok){
                 console.log("worked");
