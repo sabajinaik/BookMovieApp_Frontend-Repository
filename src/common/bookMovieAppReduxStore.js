@@ -8,7 +8,8 @@ const initialState={
 const bookMovieAppReducer= (state=initialState,action)=>{
     switch (action.type){
         case "REGISTER_USER":
-            return {...state,"storeValues":action.payload}
+        case "SUCCESSFUL_LOGIN":
+            return  {...state,"storeValues":action.payload};
         default:
             return state;
     }

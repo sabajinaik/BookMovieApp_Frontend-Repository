@@ -6,6 +6,7 @@ import Modal from 'react-modal';
 import {Tabs, Tab} from '@material-ui/core';
 import Login from './Login';
 import Register from './Register';
+import {useSelector} from "react-redux";
 
 const customStyles = {
     content: {
@@ -19,7 +20,7 @@ const customStyles = {
 };
 
 const Header = () => {
-    const[loggedIn, setLoggedIn] = React.useState(false);
+    const [buttonLabel, setButtonLabel] = React.useState("Login");
     const[modalIsOpen, setModalIsOpen] = React.useState(false);
     const[modalOptionSelected, setModalOptionSelected] = React.useState("Login");
 
@@ -27,8 +28,11 @@ const Header = () => {
         setModalOptionSelected(value);
     }
 
-    const loginButtonLabelText = loggedIn?"Logout":"Login";
+    let loggedInStatus = useSelector(state => state.storeValues.loggedInStatus);
+    if (!loggedInStatus) loggedInStatus = false;
+    const[loggedIn, setLoggedIn] = React.useState(loggedInStatus);
 
+    const loginButtonLabelText = loggedIn?"Logout":"Login";
     return (
         <div>
             <header className="app-header">
@@ -50,7 +54,7 @@ const Header = () => {
                 <Modal
                     ariaHideApp={false}
                     isOpen={modalIsOpen}
-                    contentLabel="Login"
+                    contentLabel={buttonLabel}
                     onRequestClose={()=>{setModalIsOpen(false);}}
                     style={customStyles}
                 >
@@ -58,7 +62,7 @@ const Header = () => {
                         <Tab label="Login" value="Login"/>
                         <Tab label="Register" value="Register"/>
                     </Tabs>
-                    {modalOptionSelected==="Login"?<Login/>: <Register/>}
+                    {modalOptionSelected==="Login"?<Login buttonLabel={buttonLabel} setButtonLabel={setButtonLabel}/>: <Register/>}
                 </Modal>
             </header>
         </div>

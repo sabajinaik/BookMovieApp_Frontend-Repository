@@ -1,19 +1,24 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useReducer} from 'react';
 import {TextValidator, ValidatorForm} from "react-material-ui-form-validator";
 import Button from "@material-ui/core/Button";
+import {createStore} from '../bookMovieAppReduxStore'
+import {useDispatch, useSelector} from "react-redux";
 
-const Login = () => {
-
-    const[usernamePassword, setUsernamePassword] = React.useState({
+const Login = (props) => {
+        const[usernamePassword, setUsernamePassword] = React.useState({
         username:'',
         loginPassword:''});
 
     const {username,loginPassword}=usernamePassword;
 
+    //const [state, updateLoggedInFlag] = useReducer(updateLoginStatus,{flag:0});
+    const dispatch = useDispatch();
+
     const invokeAuthenticationControllerAPI = async () => {
         try{
-            const authorizationString = btoa(`Basic ${username}:${loginPassword}`);
-            const rawResponse = await fetch(`http://localhost:8085/api/v1/auth/login`,{
+            const authorizationString = 'Basic ' + btoa(`${username}:${loginPassword}`);
+
+            const rawResponse = await fetch(`http://localhost:3000/api/v1/auth/login`,{
                 method: 'POST',
                 headers:{
                     "Content-Type": "application/json",
@@ -22,6 +27,9 @@ const Login = () => {
                 }});
             if (rawResponse.ok){
                 const result = await rawResponse.json();
+                props.setButtonLabel("Logout");
+                dispatch({"type":"SUCCESSFUL_LOGIN",payload:{"loggedInStatus":true}});
+                const values = useSelector(state=>state);
             }else{
                 //error occurred
             }
@@ -30,7 +38,8 @@ const Login = () => {
         }
     }
     const loginClickHandler=(e)=>{
-        invokeAuthenticationControllerAPI();
+        invokeAuthenticationControllerAPI()
+            .catch(error => console.log("error occurred", error));
     };
 
     const inputChangeHandler = (e)=>{
